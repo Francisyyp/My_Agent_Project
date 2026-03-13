@@ -1,0 +1,34 @@
+# === 1. 虚拟环境 (Virtual Environments) ===
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+
+# === 2. 敏感配置文件 (Secrets) ===
+# 这一行会过滤掉根目录和所有子目录下的 .env 文件
+.env
+
+# === 3. 数据库与索引 (Databases & Indexes) ===
+# 过滤 checkpoints.db, agent_memory.db 以及 SQLite 的临时文件
+*.db
+*.db-shm
+*.db-wal
+# 过滤 ChromaDB 的向量数据库文件夹
+chroma_db/
+
+# === 4. 数据与语料 (Data) ===
+# 过滤掉存 PDF 的 data 文件夹，这些通常很大且不适合放 GitHub
+data/
+
+# === 5. 运行日志与追踪 (Logs & Traces) ===
+# 过滤掉运行产生的 trace 记录
+*.jsonl
+
+# === 6. 自动生成的图片 (Artifacts) ===
+# 过滤掉生成的逻辑架构图
+*.png
+
+# === 7. 系统缓存 (System Files) ===
+.DS_Store
+Thumbs.db
