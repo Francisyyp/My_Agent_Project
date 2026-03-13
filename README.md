@@ -1,60 +1,24 @@
-# 一、 什么是“控制台日志（Logs）”与“推理轨迹（Trajectories）”？
-在开发传统软件时，你只关心结果是否正确；但在开发 Agent 时，你必须像“监考老师”一样盯着它的心路历程。
+# My_Agent_Project: 智能财务调研 Agent 
 
-推理轨迹 (Trajectories)：指 Agent 为了完成任务所经历的一系列 Thought -> Action -> Observation 的链条。
+本项目是一个从零构建的、具备工业级架构的智能财务 Agent。它经历了从基础 **ReAct** 到 **RAG (检索增强生成)**，再到使用 **LangGraph** 实现复杂状态管理和长期记忆的进化过程。
 
-例子：如果你让 Agent 查天气。
+## 🌟 核心特性
+- **推理引擎**: 基于 DeepSeek-V3 的 ReAct (Reason-Action) 循环。
+- **本地知识库 (RAG)**: 集成 ChromaDB，支持针对英伟达 (NVIDIA) 等企业研报的语义检索。
+- **长期记忆 (Persistence)**: 使用 LangGraph 的 SQLite 检查点机制，支持断点续传和多会话记忆。
+- **工具链**: 包含实时股价查询、专业财务计算器及知识库检索工具。
+- **可视化**: 自动生成 Agent 决策逻辑图 (`agent_graph.png`)。
 
-Thought: 我需要知道用户的城市，然后调用天气 API。
+## 📁 项目结构
+- `01_Single_ReAct_Agent`: 基础 ReAct 逻辑手搓实现。
+- `02_RAG_Agent`: 引入 ChromaDB 向量数据库实现知识库检索。
+- `03_RAG_Memory_Agent`: 手搓 SQLite 实现的长期对话记忆。
+- `04_LangGraph_Agent`: **[当前版本]** 使用 LangGraph 状态机重构，支持持久化。
 
-Action: get_weather(city="北京")
-
-Observation: 北京，晴，25度。
-
-这一串连起来，就是它的“轨迹”。
-
-为什么要看 Logs？：Agent 经常会“掉链子”。比如它想调工具但格式写错了，或者它陷入了死循环。 通过查看控制台实时打印的中间过程，你才能发现：“噢！原来它在这里想歪了” 或者 “它的解析器在这里卡住了”。
-
-# 二、 你的 MVA 定位：给它一个具体的“人设”
-你问得对，没有目标就没法写 Prompt。为了让你能手搓出来，我们设定一个具体的假设场景：
-
-假设：你要做一个“智能财务分析调研员”
-这个 Agent 的任务是：“帮我调研某公司的股价，并计算它如果涨了 10% 后的市值。”
-
-这个定位完美覆盖了你学习的三个模块：
-
-工具 (Tools)：它需要一个 search 工具（查股价）和一个 calculator 工具（算 10% 的涨幅）。
-
-规划 (Planning)：它必须先搜到股价（步骤 A），才能进行计算（步骤 B）。
-
-记忆 (Memory)：它在计算时，必须记得刚才搜到的具体股价是多少。
-
-# 三、 手搓这个 MVA 的“三步走”实战清单
-你现在的定位不是在写一个完整的客服系统，而是在写一个能跑通逻辑的 Python 脚本。
-
-第一步：定义“大脑”规则 (System Prompt)
-你要写一段话告诉 LLM：
-
-“你是一个财务调研员。你拥有 Search 和 Calculator 两个工具。你必须按照 Thought (思考)、Action (动作)、Observation (观察) 的格式输出。如果你拿到了最终答案，请输出 Final Answer。”
-
-第二步：手写“调度循环” (The Loop)
-这是你代码的主体：
-
-输入：把用户的问题发给 LLM。
-
-解析：用代码检查 LLM 的回复。它说 Action 了吗？
-
-执行：如果它说 Action: Search[腾讯股价]，你的 Python 代码就模拟（或真的）去搜一下，得到“400元”。
-
-反馈：把“400元”喂回给 LLM。
-
-第三步：观察日志 (Debugging)
-当你运行代码时，你会看到控制台疯狂刷屏：
-
-Agent: 我需要先搜股价...
-
-Python: 正在调用搜索工具... 结果是400...
-
-Agent: 拿到400了，现在我要算10%...
-
-这就是你要看的 Logs。 如果它在第二步突然开始胡言乱语，你就得去修你的 Prompt 或解析逻辑。
+## 🚀 快速启动 (以 04 模块为例)
+```bash
+cd 04_LangGraph_Agent
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python3 main.py
