@@ -1,0 +1,18 @@
+05_Multi_Agent_Finance/
+├── .venv/                  # 虚拟环境
+├── .env                    # 存放 API Keys (别忘了加进 .gitignore)
+├── requirements.txt        # 依赖清单
+├── state.py                # 【核心】定义团队共享的 State
+├── agents/                 # 【工厂】存放各路专家的逻辑
+│   ├── __init__.py
+│   ├── researcher.py       # 研究员：负责 RAG 和 搜索
+│   ├── charter.py          # 绘图员：负责生成 Python 图表
+│   ├── consultant.py       # 投资顾问：负责最后的综合建议
+│   └── supervisor.py       # 主管：负责任务分配和决策
+├── tools/                  # 【工具库】存放给各 Agent 用的工具
+│   ├── __init__.py
+│   ├── financial_tools.py  # 查股价、计算工具
+│   ├── rag_tools.py        # 向量数据库检索工具
+│   └── chart_tools.py       # Python 代码执行/绘图环境
+├── graph.py                # 【连线】在此定义节点和边，编译图
+└── main.py                 # 【入口】交互循环， thread_id 存档

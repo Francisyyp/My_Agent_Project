@@ -1,0 +1,11 @@
+langchain
+langchain-openai
+langchain-community
+langgraph
+langgraph-checkpoint-sqlite
+chromadb
+sentence-transformers
+pandas
+matplotlib
+langchain-experimental
+python-dotenv
